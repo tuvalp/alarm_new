@@ -1,20 +1,38 @@
+import 'package:alarm_clock/services/alarm_box_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// temp Date item
-import '../test/data.dart';
+// Service
+import '../services/alarm_box.dart';
 
 // Widget
 import './alarm_control.dart';
 import './alarm_delete.dart';
 
-class AlarmItem extends StatelessWidget {
-  final Data alarm;
+class AlarmItem extends StatefulWidget {
+  final AlarmBoxItem alarm;
+  final int index;
+  final Function? updateState;
 
-  const AlarmItem(this.alarm, {super.key});
+  AlarmItem(this.alarm, this.index, this.updateState);
+
+  @override
+  State<AlarmItem> createState() => _AlarmItemState();
+}
+
+class _AlarmItemState extends State<AlarmItem> {
+  AlarmBoxService alarmBoxService = AlarmBoxService();
+  bool isActive = true;
+
+  @override
+  void initState() {
+    isActive = widget.alarm.isActive;
+    super.initState();
+  }
 
   void moreButtonClick(context) {
-    showModalBottomSheet(context: context, builder: (context) => AlarmDelete());
+    showModalBottomSheet(
+        context: context, builder: (context) => AlarmDelete(widget.index));
   }
 
   void itemClick(context) {
@@ -28,9 +46,22 @@ class AlarmItem extends StatelessWidget {
           topRight: Radius.circular(40),
           topLeft: Radius.circular(40),
         ),
-        child: AlarmCntorl(alarm, true),
+        child:
+            AlarmCntorl(widget.alarm, widget.index, true, widget.updateState),
       ),
     );
+  }
+
+  void onSwitchChange() {
+    isActive = !isActive;
+
+    alarmBoxService.Update(
+        AlarmBoxItem(
+            id: widget.alarm.id,
+            time: widget.alarm.time,
+            note: widget.alarm.note,
+            isActive: isActive),
+        widget.index);
   }
 
   @override
@@ -47,17 +78,18 @@ class AlarmItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Text(widget.index.toString()),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(DateFormat('HH:mm').format(alarm.time),
+                Text(DateFormat('HH:mm').format(widget.alarm.time),
                     style: const TextStyle(
                       fontSize: 34,
                       fontWeight: FontWeight.w600,
                     )),
-                alarm.note != ""
-                    ? Text(alarm.note,
+                widget.alarm.note != ""
+                    ? Text(widget.alarm.note,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w100,
@@ -71,8 +103,8 @@ class AlarmItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Switch(
-                  value: alarm.isActive,
-                  onChanged: (value) {},
+                  value: isActive,
+                  onChanged: (value) => onSwitchChange(),
                 ),
                 IconButton(
                     onPressed: () => moreButtonClick(context),

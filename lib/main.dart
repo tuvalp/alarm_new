@@ -1,7 +1,9 @@
+import 'package:alarm_clock/services/alarm_box_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 // Screens
 import './services/route_service.dart';
@@ -15,9 +17,13 @@ void startCallback() {
   FlutterForegroundTask.setTaskHandler(MyTaskHandler());
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  startCallback();
+
+  // Iintilzaing Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(AlarmBoxItemAdapter());
+  await Hive.openBox<AlarmBoxItem>("alarmsBox");
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Color(0xFFF5F5F5),

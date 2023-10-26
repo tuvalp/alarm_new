@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 
-// Tamp date obj
-import '../test/data.dart';
+// Service
+import 'package:alarm_clock/services/alarm_box.dart';
+import 'package:alarm_clock/services/alarm_box_item.dart';
 
 class AlarmCntorl extends StatefulWidget {
-  final Data? alarm;
+  final AlarmBoxItem? alarm;
+  final int? index;
   final bool? updateMode;
+  final Function? updateState;
 
-  const AlarmCntorl([this.alarm, this.updateMode]);
+  const AlarmCntorl(
+      [this.alarm, this.index, this.updateMode, this.updateState]);
 
   @override
-  State<AlarmCntorl> createState() => _AlarmCntorlState(alarm, updateMode);
+  State<AlarmCntorl> createState() => _AlarmCntorlState();
 }
 
 class _AlarmCntorlState extends State<AlarmCntorl> {
-  final Data? alarm;
-  final bool? updateMode;
-  _AlarmCntorlState([this.alarm, this.updateMode]);
+  AlarmBoxService alarmBoxService = AlarmBoxService();
 
-  TextEditingController noteController = TextEditingController(text: "Note");
+  TextEditingController noteController = TextEditingController();
   int id = DateTime.now().microsecondsSinceEpoch;
   DateTime time = DateTime.now().add(const Duration(minutes: 1));
   String note = "";
@@ -27,15 +29,14 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
 
   @override
   void initState() {
-    print(id);
-    if (updateMode == true) {
-      id = alarm!.id;
-      time = alarm!.time;
-      note = alarm!.note;
-      isActive = alarm!.isActive;
+    if (widget.updateMode == true) {
+      id = widget.alarm!.id;
+      time = widget.alarm!.time;
+      note = widget.alarm!.note;
+      isActive = widget.alarm!.isActive;
 
-      if (alarm!.note.isNotEmpty) {
-        noteController = TextEditingController(text: alarm!.note);
+      if (widget.alarm!.note.isNotEmpty) {
+        noteController = TextEditingController(text: widget.alarm!.note);
       }
     }
     super.initState();
@@ -46,13 +47,16 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
   }
 
   void onCheakButton() {
-    var courentAlarm = Data(id: id, isActive: isActive, note: note, time: time);
-    print(courentAlarm.toString());
+    var courentAlarm =
+        AlarmBoxItem(id: id, isActive: isActive, note: note, time: time);
 
-    if (updateMode == true) {
+    if (widget.updateMode == true) {
+      alarmBoxService.Update(courentAlarm, widget.index);
+      widget.updateState!();
     } else {
-      data.add(courentAlarm);
+      alarmBoxService.Add(courentAlarm);
     }
+
     Navigator.pop(context);
   }
 
@@ -156,8 +160,8 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
                                 }),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.blue),
-                            decoration:
-                                const InputDecoration.collapsed(hintText: "")),
+                            decoration: const InputDecoration.collapsed(
+                                hintText: "Note")),
                       ),
                     ],
                   ),
