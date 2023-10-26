@@ -9,20 +9,20 @@ class HomeScreen extends StatelessWidget {
 
   FloatingActionButton addAlarmButton(context) => FloatingActionButton(
         onPressed: (() {
-          //Navigator.pushNamed(context, "/alarm_ring");
-          showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            isDismissible: false,
-            context: context,
-            builder: (context) => const ClipRRect(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(40),
-                topLeft: Radius.circular(40),
-              ),
-              child: AlarmCntorl(),
-            ),
-          );
+          Navigator.pushNamed(context, "/alarm_ring");
+          // showModalBottomSheet(
+          //   backgroundColor: Colors.transparent,
+          //   isScrollControlled: true,
+          //   isDismissible: false,
+          //   context: context,
+          //   builder: (context) => const ClipRRect(
+          //     borderRadius: BorderRadius.only(
+          //       topRight: Radius.circular(40),
+          //       topLeft: Radius.circular(40),
+          //     ),
+          //     child: AlarmCntorl(),
+          //   ),
+          // );
         }),
         child: const Icon(Icons.alarm_add),
       );
