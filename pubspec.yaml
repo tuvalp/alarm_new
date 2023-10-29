@@ -33,11 +33,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.18.1
   flutter_ringtone_player: ^3.2.0
-  vibration: ^1.8.3
-  flutter_foreground_task: ^6.0.0
+  flutter_foreground_task: ^6.1.2
   flutter_time_picker_spinner: ^2.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  get: ^4.6.6
+  vibration: ^1.8.1
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

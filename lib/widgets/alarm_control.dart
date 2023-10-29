@@ -5,20 +5,20 @@ import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:alarm_clock/services/alarm_box.dart';
 import 'package:alarm_clock/services/alarm_box_item.dart';
 
-class AlarmCntorl extends StatefulWidget {
+class AlarmContorl extends StatefulWidget {
   final AlarmBoxItem? alarm;
   final int? index;
   final bool? updateMode;
-  final Function? updateState;
+  final Function? updateSwitch;
 
-  const AlarmCntorl(
-      [this.alarm, this.index, this.updateMode, this.updateState]);
+  const AlarmContorl(
+      [this.alarm, this.index, this.updateMode, this.updateSwitch]);
 
   @override
-  State<AlarmCntorl> createState() => _AlarmCntorlState();
+  State<AlarmContorl> createState() => _AlarmCntorlState();
 }
 
-class _AlarmCntorlState extends State<AlarmCntorl> {
+class _AlarmCntorlState extends State<AlarmContorl> {
   AlarmBoxService alarmBoxService = AlarmBoxService();
 
   TextEditingController noteController = TextEditingController();
@@ -52,7 +52,6 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
 
     if (widget.updateMode == true) {
       alarmBoxService.Update(courentAlarm, widget.index);
-      widget.updateState!();
     } else {
       alarmBoxService.Add(courentAlarm);
     }
@@ -73,11 +72,7 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
         child: Flex(
           direction: Axis.vertical,
           mainAxisSize: MainAxisSize.max,
-
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            //const SizedBox(height: 30),
             Expanded(
               flex: 2,
               child: TimePickerSpinner(
@@ -161,7 +156,9 @@ class _AlarmCntorlState extends State<AlarmCntorl> {
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.blue),
                             decoration: const InputDecoration.collapsed(
-                                hintText: "Note")),
+                              hintText: "Note",
+                              hintStyle: TextStyle(color: Colors.blue),
+                            )),
                       ),
                     ],
                   ),

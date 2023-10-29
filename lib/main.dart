@@ -1,21 +1,16 @@
-import 'package:alarm_clock/services/alarm_box_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:get/get.dart';
 
 // Screens
-import './services/route_service.dart';
+import '../screens/home_page.dart';
+import '../screens/alarm_ring.dart';
 
 // Service
-import './services/task_service.dart';
-
-@pragma('vm:entry-point')
-void startCallback() {
-  // The setTaskHandler function must be called to handle the task in the background.
-  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
-}
+import './services/alarm_box_item.dart';
+import './services/foreground_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +19,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AlarmBoxItemAdapter());
   await Hive.openBox<AlarmBoxItem>("alarmsBox");
+  ForegroundService().permission();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Color(0xFFF5F5F5),
@@ -36,24 +32,23 @@ void main() async {
 class AlarmClock extends StatelessWidget {
   const AlarmClock({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      maintainBottomViewPadding: false,
-      child: MaterialApp(
-        title: 'Alarm',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-          primaryColor: Colors.blue,
-          // colorScheme: const ColorScheme.light(
-          //     primary: Colors.blue, background: Color(0xFFF5F5F5)),
-          // useMaterial3: true,
-        ),
-        initialRoute: "/",
-        routes: RouteService().route,
+    return GetMaterialApp(
+      title: 'Alarm',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+        primaryColor: Colors.blue,
       ),
+      getPages: [
+        GetPage(name: "/", page: () => const HomeScreen()),
+        GetPage(name: "/alarm_ring", page: () => const AlarmRingScreen()),
+      ],
+      // routes: {
+      //   "/": (context) => const HomeScreen(),
+      //   "/alarm_ring": (context) => const AlarmRingScreen(),
+      // },
     );
   }
 }

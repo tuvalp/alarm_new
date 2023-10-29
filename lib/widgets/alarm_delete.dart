@@ -5,7 +5,7 @@ import '../services/alarm_box.dart';
 
 class AlarmDelete extends StatelessWidget {
   final int index;
-  AlarmBoxService alarmBoxService = AlarmBoxService();
+  final AlarmBoxService alarmBoxService = AlarmBoxService();
   AlarmDelete(this.index);
 
   void onDeleteClick(context) {
@@ -22,9 +22,9 @@ class AlarmDelete extends StatelessWidget {
           iconSize: 65,
           alignment: Alignment.center,
           onPressed: () => onDeleteClick(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.delete,
-            color: Colors.red,
+            color: Colors.red.shade800,
           ),
         ),
       ),

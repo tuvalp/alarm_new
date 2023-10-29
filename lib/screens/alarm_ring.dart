@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:vibration/vibration.dart';
+import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+
+import '../services/alarm_box.dart';
 
 class AlarmRingScreen extends StatefulWidget {
   const AlarmRingScreen({super.key});
@@ -26,16 +29,23 @@ class _AlarmRingScreenState extends State<AlarmRingScreen> {
       volume: 1,
       asAlarm: true,
     );
-    //Vibration.vibrate(duration: 60000);
+
+    Vibration.vibrate(pattern: [500, 3000], duration: 60000);
   }
 
   void onStopButtonClick() {
+    AlarmBoxService().setAlarms();
     FlutterRingtonePlayer.stop();
     Vibration.cancel();
-    Navigator.pop(context);
+    Get.toNamed("/");
   }
 
-  void onSnozButtonClick() {}
+  void onSnozButtonClick() {
+    AlarmBoxService().setSnooz();
+    FlutterRingtonePlayer.stop();
+    Vibration.cancel();
+    Get.toNamed("/");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,33 +78,38 @@ class _AlarmRingScreenState extends State<AlarmRingScreen> {
               child: TextButton(
                 onPressed: () => onSnozButtonClick(),
                 child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 170,
+                  height: 170,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(75),
-                    color: Colors.blue,
+                    border: Border.all(color: Colors.blue, width: 2),
+                    color: Colors.transparent,
                   ),
                   child: const Text(
-                    "Snoz",
+                    "Snooz",
                     style: TextStyle(
                         fontSize: 34,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blue),
                   ),
                 ),
               ),
             )),
             Flexible(
-              // child: Align(
-              //   alignment: Alignment.bottomCenter,
               child: Container(
-                padding: const EdgeInsets.only(top: 200),
+                padding: const EdgeInsets.only(top: 150),
                 width: double.infinity,
-                child: OutlinedButton(
-                  child: const Text("Stop",
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.w400)),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 3,
+                    padding: const EdgeInsets.all(10),
+                    textStyle: const TextStyle(
+                        fontSize: 26, fontWeight: FontWeight.w200),
+                  ),
+                  child: const Text(
+                    "Stop",
+                  ),
                   onPressed: () => onStopButtonClick(),
                 ),
               ),

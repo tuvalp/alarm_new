@@ -12,9 +12,8 @@ import './alarm_delete.dart';
 class AlarmItem extends StatefulWidget {
   final AlarmBoxItem alarm;
   final int index;
-  final Function? updateState;
 
-  AlarmItem(this.alarm, this.index, this.updateState);
+  AlarmItem(this.alarm, this.index);
 
   @override
   State<AlarmItem> createState() => _AlarmItemState();
@@ -22,13 +21,6 @@ class AlarmItem extends StatefulWidget {
 
 class _AlarmItemState extends State<AlarmItem> {
   AlarmBoxService alarmBoxService = AlarmBoxService();
-  bool isActive = true;
-
-  @override
-  void initState() {
-    isActive = widget.alarm.isActive;
-    super.initState();
-  }
 
   void moreButtonClick(context) {
     showModalBottomSheet(
@@ -39,28 +31,26 @@ class _AlarmItemState extends State<AlarmItem> {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      isDismissible: false,
+      isDismissible: true,
+      showDragHandle: false,
       context: context,
       builder: (context) => ClipRRect(
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(40),
           topLeft: Radius.circular(40),
         ),
-        child:
-            AlarmCntorl(widget.alarm, widget.index, true, widget.updateState),
+        child: AlarmContorl(widget.alarm, widget.index, true),
       ),
     );
   }
 
-  void onSwitchChange() {
-    isActive = !isActive;
-
+  void onSwitchChange(isActive) {
     alarmBoxService.Update(
         AlarmBoxItem(
             id: widget.alarm.id,
             time: widget.alarm.time,
             note: widget.alarm.note,
-            isActive: isActive),
+            isActive: !isActive),
         widget.index);
   }
 
@@ -78,7 +68,6 @@ class _AlarmItemState extends State<AlarmItem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.index.toString()),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -103,11 +92,14 @@ class _AlarmItemState extends State<AlarmItem> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Switch(
-                  value: isActive,
-                  onChanged: (value) => onSwitchChange(),
-                ),
+                    value: widget.alarm.isActive,
+                    onChanged: (isActive) {
+                      isActive = !isActive;
+                      onSwitchChange(isActive);
+                    }),
                 IconButton(
                     onPressed: () => moreButtonClick(context),
+                    iconSize: 26,
                     icon: const Icon(Icons.more_vert)),
               ],
             ),
