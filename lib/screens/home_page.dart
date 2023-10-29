@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
           showModalBottomSheet(
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
-            isDismissible: true,
+            isDismissible: false,
             showDragHandle: false,
             context: context,
             builder: (context) => const ClipRRect(
