@@ -1,13 +1,6 @@
 import UIKit
 import Flutter
 
-import <flutter_foreground_task/FlutterForegroundTaskPlugin.h>
-
-// here
-void registerPlugins(NSObject<FlutterPluginRegistry>* registry) {
-  [GeneratedPluginRegistrant registerWithRegistry:registry];
-
-
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -15,18 +8,16 @@ void registerPlugins(NSObject<FlutterPluginRegistry>* registry) {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
-
-    // here, Without this code the task will not work.
+    
     SwiftFlutterForegroundTaskPlugin.setPluginRegistrantCallback(registerPlugins)
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
-
+    
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
 
-// here
 func registerPlugins(registry: FlutterPluginRegistry) {
   GeneratedPluginRegistrant.register(with: registry)
 }
