@@ -31,6 +31,24 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFF5F5F5),
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () => (),
+            color: Colors.blue,
+            iconSize: 40,
+            icon: const Icon(Icons.account_circle),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => (),
+              color: Colors.grey,
+              iconSize: 40,
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
         body: const AlarmView(),
         floatingActionButton: addAlarmButton(context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

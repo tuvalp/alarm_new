@@ -85,9 +85,9 @@ class _AlarmCntorlState extends State<AlarmContorl> {
                   time = newTime.copyWith(second: 0);
                 }),
                 normalTextStyle:
-                    const TextStyle(fontSize: 38, fontWeight: FontWeight.w300),
+                    const TextStyle(fontSize: 34, fontWeight: FontWeight.w300),
                 highlightedTextStyle: const TextStyle(
-                  fontSize: 38,
+                  fontSize: 34,
                   fontWeight: FontWeight.w400,
                   color: Colors.blue,
                 ),
