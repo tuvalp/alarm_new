@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 @pragma('vm:entry-point')
 void foregroundCallBack() {
@@ -58,6 +59,9 @@ class ForegroundService {
     FlutterForegroundTask.requestNotificationPermission();
     FlutterForegroundTask.requestIgnoreBatteryOptimization();
     FlutterForegroundTask.openSystemAlertWindowSettings();
+
+    Permission.notification.request();
+    Permission.criticalAlerts.request();
   }
 
   bool _registerReceivePort(ReceivePort? newReceivePort) {
