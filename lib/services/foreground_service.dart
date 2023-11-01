@@ -57,6 +57,7 @@ class ForegroundService {
   void permission() {
     FlutterForegroundTask.requestNotificationPermission();
     FlutterForegroundTask.requestIgnoreBatteryOptimization();
+    FlutterForegroundTask.openSystemAlertWindowSettings();
   }
 
   bool _registerReceivePort(ReceivePort? newReceivePort) {
